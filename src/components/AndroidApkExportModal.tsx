@@ -244,21 +244,21 @@ cd android && ./gradlew assembleDebug
                 </p>
               </div>
 
-              {/* Box specifically explaining root cause fixes: wrapper validation + AGP 8.13 patch + setup-android */}
+              {/* Box specifically explaining root cause fixes: corrupt wrapper jar + gitattributes + AGP patch */}
               <div className="p-4 bg-emerald-950/50 border border-emerald-700/80 rounded-xl space-y-3">
                 <div className="flex items-center gap-2 font-bold text-emerald-300 text-xs">
                   <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
-                  <span>Workflow Architecture & AGP Patch Fixes Applied!</span>
+                  <span>Corrupt Wrapper JAR & Binary Protection Fixes Applied!</span>
                 </div>
                 <ul className="list-disc list-inside space-y-2 text-[11px] text-slate-300">
                   <li>
-                    <strong className="text-amber-300">Wrapper Validation Fix:</strong> Added <code className="text-emerald-300 font-mono">validate-wrappers: false</code> to <code className="text-cyan-300 font-mono">setup-gradle@v4</code> to bypass the Capacitor Gradle Wrapper JAR hash mismatch error!
+                    <strong className="text-amber-300">Corrupt JAR Fix:</strong> Added <code className="text-emerald-300 font-mono">gradle wrapper --gradle-version 8.11.1</code> step to automatically regenerate a fresh, clean <code className="text-cyan-300 font-mono">gradle-wrapper.jar</code> before building.
                   </li>
                   <li>
-                    <strong className="text-emerald-400">Android SDK Setup:</strong> Configured official <code className="text-cyan-300 font-mono">android-actions/setup-android@v3</code> with automatic SDK licenses and <code className="text-emerald-300 font-mono">sdk.dir=$ANDROID_HOME</code>.
+                    <strong className="text-cyan-300">Git Binary Protection:</strong> Added <code className="text-emerald-300 font-mono">.gitattributes</code> to prevent Git line-ending conversions from corrupting <code className="text-cyan-300 font-mono">*.jar</code> files during checkout.
                   </li>
                   <li>
-                    <strong className="text-cyan-300">Automated AGP Patch:</strong> Enhanced <code className="text-emerald-300 font-mono">scripts/patch-agp.js</code> scans all Gradle files across the repository to ensure stable AGP <code className="text-emerald-300 font-mono">8.7.3</code> is used.
+                    <strong className="text-emerald-400">AGP Patch & SDK:</strong> Configured <code className="text-cyan-300 font-mono">scripts/patch-agp.js</code> for AGP 8.7.3 and official <code className="text-cyan-300 font-mono">android-actions/setup-android@v3</code>.
                   </li>
                   <li>
                     <strong className="text-cyan-300 font-bold">Steps to run your build:</strong>
