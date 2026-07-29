@@ -244,25 +244,25 @@ cd android && ./gradlew assembleDebug
                 </p>
               </div>
 
-              {/* Box specifically explaining root cause AGP 8.13.0 fix & Node runtime upgrade */}
+              {/* Box specifically explaining root cause AGP 8.13.0 fix & SDK license config */}
               <div className="p-4 bg-emerald-950/50 border border-emerald-700/80 rounded-xl space-y-3">
                 <div className="flex items-center gap-2 font-bold text-emerald-300 text-xs">
                   <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
-                  <span>Official Gradle Action & Native Android SDK Configured!</span>
+                  <span>Android SDK Auto-Licenses & AGP Patch Configured!</span>
                 </div>
                 <ul className="list-disc list-inside space-y-2 text-[11px] text-slate-300">
                   <li>
-                    <strong className="text-amber-300">JavaScript Action Runtime Fix:</strong> Replaced legacy third-party <code className="text-cyan-300 font-mono">setup-android</code> action with official <code className="text-emerald-300 font-mono">gradle/actions/setup-gradle@v4</code> and native pre-installed runner Android SDK.
+                    <strong className="text-amber-300">Android SDK & License Config:</strong> The workflow now auto-creates <code className="text-cyan-300 font-mono">android/local.properties</code>, accepts Android SDK licenses automatically, and ensures SDK Platform 35 is pre-installed.
                   </li>
                   <li>
-                    <strong className="text-emerald-400">Automated AGP Patch:</strong> <code className="text-emerald-300 font-mono">scripts/patch-agp.js</code> automatically runs during <code className="text-cyan-300 font-mono">npm install</code> and workflow build steps to ensure AGP <code className="text-emerald-300 font-mono">8.7.3</code> is used.
+                    <strong className="text-emerald-400">AGP Version Fix:</strong> <code className="text-emerald-300 font-mono">scripts/patch-agp.js</code> automatically updates all Capacitor Gradle build files to stable AGP <code className="text-emerald-300 font-mono">8.7.3</code> during <code className="text-cyan-300 font-mono">npm install</code> and workflow runs.
                   </li>
                   <li>
                     <strong className="text-cyan-300 font-bold">Steps to run your build:</strong>
                     <div className="mt-1.5 p-2.5 bg-slate-950 rounded-lg border border-slate-800 space-y-1 text-slate-200 text-[11px]">
                       <div>1. <strong>Export / Push to GitHub</strong> from the top project menu in AI Studio (or run <code className="text-emerald-400 font-mono">git push</code>).</div>
                       <div>2. On GitHub, navigate to <strong>Actions</strong> and tap <strong className="text-white font-bold">"Run workflow"</strong>.</div>
-                      <div>3. In ~2 minutes, the build will complete with a green checkmark (✔)! Scroll down to <strong className="text-amber-300 font-bold">Artifacts</strong> and tap <strong className="text-emerald-300 font-mono font-bold">CryptoMiner-Debug-APK</strong> to download and install!</div>
+                      <div>3. In ~2 minutes, the build will complete with a green checkmark (✔)! Scroll down to <strong className="text-amber-300 font-bold font-mono">Artifacts</strong> and tap <strong className="text-emerald-300 font-mono font-bold">CryptoMiner-Debug-APK</strong> to download!</div>
                     </div>
                   </li>
                 </ul>
