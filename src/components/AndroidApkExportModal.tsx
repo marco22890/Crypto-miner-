@@ -244,21 +244,21 @@ cd android && ./gradlew assembleDebug
                 </p>
               </div>
 
-              {/* Box specifically explaining root cause fixes: corrupt wrapper jar + gitattributes + AGP patch */}
+              {/* Box specifically explaining root cause fixes: JDK 17 + SDK licenses + AGP 8.7.3 patch */}
               <div className="p-4 bg-emerald-950/50 border border-emerald-700/80 rounded-xl space-y-3">
                 <div className="flex items-center gap-2 font-bold text-emerald-300 text-xs">
                   <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
-                  <span>Corrupt Wrapper JAR & Binary Protection Fixes Applied!</span>
+                  <span>SDK License Acceptance & Gradle Multi-Invocation Fix Applied!</span>
                 </div>
                 <ul className="list-disc list-inside space-y-2 text-[11px] text-slate-300">
                   <li>
-                    <strong className="text-amber-300">Corrupt JAR Fix:</strong> Added <code className="text-emerald-300 font-mono">gradle wrapper --gradle-version 8.11.1</code> step to automatically regenerate a fresh, clean <code className="text-cyan-300 font-mono">gradle-wrapper.jar</code> before building.
+                    <strong className="text-amber-300">Android SDK & License Config:</strong> The workflow automatically accepts all SDK licenses (<code className="text-emerald-300 font-mono">sdkmanager --licenses</code>) and installs Android SDK Platform 35.
                   </li>
                   <li>
-                    <strong className="text-cyan-300">Git Binary Protection:</strong> Added <code className="text-emerald-300 font-mono">.gitattributes</code> to prevent Git line-ending conversions from corrupting <code className="text-cyan-300 font-mono">*.jar</code> files during checkout.
+                    <strong className="text-cyan-300">Resilient Build Execution:</strong> Uses Java JDK 17 LTS with automatic fallback (<code className="text-emerald-300 font-mono">./gradlew assembleDebug || gradle assembleDebug</code>) to prevent wrapper execution errors.
                   </li>
                   <li>
-                    <strong className="text-emerald-400">AGP Patch & SDK:</strong> Configured <code className="text-cyan-300 font-mono">scripts/patch-agp.js</code> for AGP 8.7.3 and official <code className="text-cyan-300 font-mono">android-actions/setup-android@v3</code>.
+                    <strong className="text-emerald-400">Automated AGP Patch & .gitattributes:</strong> Ensures AGP <code className="text-emerald-300 font-mono">8.7.3</code> and binary file protections (<code className="text-cyan-300 font-mono">.gitattributes</code>) are applied cleanly across all builds.
                   </li>
                   <li>
                     <strong className="text-cyan-300 font-bold">Steps to run your build:</strong>
