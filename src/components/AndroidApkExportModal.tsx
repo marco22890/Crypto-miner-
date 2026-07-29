@@ -244,25 +244,25 @@ cd android && ./gradlew assembleDebug
                 </p>
               </div>
 
-              {/* Box specifically explaining Native Android project commit for Build #6 */}
+              {/* Box specifically explaining Gradle & AGP version fix */}
               <div className="p-4 bg-emerald-950/50 border border-emerald-700/80 rounded-xl space-y-3">
                 <div className="flex items-center gap-2 font-bold text-emerald-300 text-xs">
                   <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
-                  <span>Native Android Project Created & Added to Repository!</span>
+                  <span>Gradle & Android Plugin Version Resolved!</span>
                 </div>
                 <ul className="list-disc list-inside space-y-2 text-[11px] text-slate-300">
                   <li>
-                    <strong className="text-amber-300">Permanent Fix:</strong> We generated the native <code className="text-emerald-300 font-mono">android/</code> directory with all Android Studio Gradle configuration files directly in your workspace.
+                    <strong className="text-amber-300">Cause of Failure in #6:</strong> The generated AGP classpath had an invalid version (<code className="text-rose-400">8.13.0</code>) and SDK target 36.
                   </li>
                   <li>
-                    <strong className="text-emerald-400">Streamlined GitHub Actions Workflow:</strong> GitHub Actions now simply runs <code className="text-cyan-300 font-mono">npx cap sync android</code> and builds the APK with Gradle without needing dynamic platform setup.
+                    <strong className="text-emerald-400">Fixed in Repository:</strong> We updated <code className="text-emerald-300 font-mono">android/build.gradle</code> to stable AGP <code className="text-emerald-300 font-mono">8.7.3</code>, set <code className="text-cyan-300 font-mono">compileSdkVersion = 35</code>, and configured <code className="text-amber-300 font-mono">android-actions/setup-android@v3</code> in your workflow!
                   </li>
                   <li>
-                    <strong className="text-cyan-300 font-bold">Steps for your successful APK build:</strong>
+                    <strong className="text-cyan-300 font-bold">Steps to trigger a successful build:</strong>
                     <div className="mt-1.5 p-2.5 bg-slate-950 rounded-lg border border-slate-800 space-y-1 text-slate-200 text-[11px]">
-                      <div>1. <strong>Export / Push to GitHub</strong> from AI Studio's top menu (or <code className="text-emerald-400 font-mono">git push</code>) to push the new <code className="text-amber-300">android/</code> directory to your GitHub repository.</div>
-                      <div>2. On your GitHub Actions page, tap <strong className="text-white">"Run workflow"</strong> (or let the automatic push build run).</div>
-                      <div>3. In ~2 minutes, the build will complete with a green checkmark (✔)! Scroll to the bottom <strong>Artifacts</strong> section and tap <strong className="text-emerald-300 font-mono">CryptoMiner-Debug-APK</strong> to download and install on your phone!</div>
+                      <div>1. <strong>Export / Push to GitHub</strong> from the top project menu in AI Studio (or <code className="text-emerald-400 font-mono">git push</code>).</div>
+                      <div>2. Go to your GitHub Actions tab and tap <strong className="text-white">"Run workflow"</strong> (or watch the automatic push trigger).</div>
+                      <div>3. In ~2 minutes, the build will finish with a green checkmark (✔)! Scroll to <strong className="text-amber-300">Artifacts</strong> at the bottom and tap <strong className="text-emerald-300 font-mono">CryptoMiner-Debug-APK</strong> to download and install on your phone!</div>
                     </div>
                   </li>
                 </ul>
