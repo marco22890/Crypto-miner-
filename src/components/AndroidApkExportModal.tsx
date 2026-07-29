@@ -244,27 +244,28 @@ cd android && ./gradlew assembleDebug
                 </p>
               </div>
 
-              {/* Box specifically helping with the screenshot they sent */}
-              <div className="p-4 bg-slate-900 border border-cyan-800/80 rounded-xl space-y-3">
-                <div className="flex items-center gap-2 font-bold text-cyan-300 text-xs">
-                  <ExternalLink className="w-4 h-4 text-cyan-400 flex-shrink-0" />
-                  <span>How to find & download your APK on GitHub Mobile:</span>
+              {/* Box specifically helping with the failure screenshot */}
+              <div className="p-4 bg-amber-950/40 border border-amber-800/80 rounded-xl space-y-3">
+                <div className="flex items-center gap-2 font-bold text-amber-400 text-xs">
+                  <AlertTriangle className="w-4 h-4 text-amber-400 flex-shrink-0" />
+                  <span>Fixing "Dependencies lock file is not found" (Workflow Build Fix):</span>
                 </div>
-                
-                <ol className="list-decimal list-inside space-y-2.5 text-slate-300 text-[11px] leading-relaxed">
-                  <li className="p-2.5 bg-slate-950 rounded-lg border border-slate-800">
-                    <strong className="text-amber-300">If you see the "Deployment" / templates page (from your screenshot):</strong><br/>
-                    Tap <strong>"All workflows"</strong> or the top-left menu on the Actions page, then select <strong className="text-emerald-400">"Build Android APK"</strong> from the workflow list.
+                <ul className="list-disc list-inside space-y-2 text-[11px] text-slate-300">
+                  <li>
+                    <strong className="text-amber-300">Cause of Failure in #2:</strong> GitHub's <code className="text-rose-400">setup-node</code> step was looking for a <code className="text-amber-300 font-mono">package-lock.json</code> file that wasn't committed to the repo yet.
                   </li>
-                  <li className="p-2.5 bg-slate-950 rounded-lg border border-slate-800">
-                    <strong className="text-cyan-300">Trigger the Build:</strong><br/>
-                    Tap the blue <strong className="text-white">"Run workflow"</strong> button on the right side and press <strong className="text-emerald-400">"Run workflow"</strong>. (GitHub cloud servers will compile your APK in ~2 minutes).
+                  <li>
+                    <strong className="text-emerald-400">We just updated your workflow file!</strong> We removed the lock file check in <code className="text-cyan-300 font-mono">.github/workflows/build-apk.yml</code> so `npm install` runs smoothly without errors.
                   </li>
-                  <li className="p-2.5 bg-slate-950 rounded-lg border border-slate-800">
-                    <strong className="text-emerald-400">Download the APK file:</strong><br/>
-                    Once the build shows a green checkmark (✔), tap on the workflow run. Scroll down to the very bottom to the <strong className="text-amber-300">"Artifacts"</strong> section and tap <strong className="text-emerald-300 font-mono">CryptoMiner-Debug-APK</strong> to download!
+                  <li>
+                    <strong className="text-cyan-300 font-bold">How to trigger Build #3 now:</strong>
+                    <div className="mt-1.5 p-2.5 bg-slate-950 rounded-lg border border-slate-800 space-y-1 text-slate-200 text-[11px]">
+                      <div>1. <strong>Export / Push to GitHub</strong> from the top AI Studio menu (or via <code className="text-emerald-400 font-mono">git push</code> in your repo).</div>
+                      <div>2. On your GitHub Actions screen, tap <strong>"Run workflow"</strong> again to trigger <strong>Build #3</strong>!</div>
+                      <div>3. It will finish with a green checkmark (✔) in ~2 minutes and provide your downloadable <strong className="text-emerald-300">CryptoMiner-Debug-APK</strong> under Artifacts!</div>
+                    </div>
                   </li>
-                </ol>
+                </ul>
               </div>
 
               {/* Instant PWA reminder */}
