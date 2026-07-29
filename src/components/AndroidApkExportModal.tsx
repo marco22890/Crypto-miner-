@@ -244,24 +244,24 @@ cd android && ./gradlew assembleDebug
                 </p>
               </div>
 
-              {/* Box specifically explaining Node 22 and Gradle 8.11.1 fix */}
+              {/* Box specifically explaining root cause AGP 8.13.0 fix */}
               <div className="p-4 bg-emerald-950/50 border border-emerald-700/80 rounded-xl space-y-3">
                 <div className="flex items-center gap-2 font-bold text-emerald-300 text-xs">
                   <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
-                  <span>Upgraded Node.js 22 & Gradle 8.11.1 (Build #7 Ready)!</span>
+                  <span>Root Cause Identified & Fixed (AGP 8.13.0 → 8.7.3)!</span>
                 </div>
                 <ul className="list-disc list-inside space-y-2 text-[11px] text-slate-300">
                   <li>
-                    <strong className="text-amber-300">Deprecation Warning Cleared:</strong> Upgraded GitHub Actions setup to <code className="text-cyan-300 font-mono">node-version: 22</code> (resolving Node 20 runner deprecations).
+                    <strong className="text-amber-300">Root Cause Found:</strong> Capacitor v7's build script referenced unreleased AGP <code className="text-rose-400 font-mono">8.13.0</code> inside <code className="text-cyan-300 font-mono">@capacitor/android</code>, causing Gradle lookups to fail.
                   </li>
                   <li>
-                    <strong className="text-emerald-400">Gradle Wrapper Fixed:</strong> Updated <code className="text-emerald-300 font-mono">gradle-wrapper.properties</code> to standard <code className="text-emerald-300 font-mono">gradle-8.11.1-all.zip</code>.
+                    <strong className="text-emerald-400">Fix Applied:</strong> Added automated workflow patching (<code className="text-emerald-300 font-mono">sed</code> patch) and Gradle <code className="text-amber-300 font-mono">resolutionStrategy</code> forcing stable AGP <code className="text-emerald-300 font-mono">8.7.3</code>!
                   </li>
                   <li>
-                    <strong className="text-cyan-300 font-bold">Steps to run Build #7:</strong>
+                    <strong className="text-cyan-300 font-bold">Steps to run your successful APK build:</strong>
                     <div className="mt-1.5 p-2.5 bg-slate-950 rounded-lg border border-slate-800 space-y-1 text-slate-200 text-[11px]">
-                      <div>1. <strong>Export / Push to GitHub</strong> from the top menu in AI Studio (or run <code className="text-emerald-400 font-mono">git push</code>).</div>
-                      <div>2. On GitHub, navigate to Actions and tap <strong className="text-white">"Run workflow"</strong> (or watch automatic push run).</div>
+                      <div>1. <strong>Export / Push to GitHub</strong> from the top menu in AI Studio (or run <code className="text-emerald-400 font-mono">git push</code> in your terminal).</div>
+                      <div>2. On GitHub, go to the <strong>Actions</strong> tab and tap <strong className="text-white">"Run workflow"</strong>.</div>
                       <div>3. In ~2 minutes, the build will finish with a green checkmark (✔)! Scroll down to <strong className="text-amber-300">Artifacts</strong> and tap <strong className="text-emerald-300 font-mono">CryptoMiner-Debug-APK</strong> to download and install!</div>
                     </div>
                   </li>

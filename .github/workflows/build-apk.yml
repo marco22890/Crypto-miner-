@@ -37,6 +37,11 @@ jobs:
         run: |
           npm run build
 
+      - name: Patch AGP Version in Dependencies
+        run: |
+          sed -i 's/8.13.0/8.7.3/g' node_modules/@capacitor/android/capacitor/build.gradle || true
+          sed -i 's/8.13.0/8.7.3/g' android/capacitor-cordova-android-plugins/build.gradle || true
+
       - name: Sync Capacitor Android
         run: |
           npx cap sync android
