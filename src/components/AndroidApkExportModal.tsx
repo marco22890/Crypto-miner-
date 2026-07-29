@@ -244,25 +244,25 @@ cd android && ./gradlew assembleDebug
                 </p>
               </div>
 
-              {/* Box specifically explaining fix for Build #4 */}
-              <div className="p-4 bg-emerald-950/40 border border-emerald-800/80 rounded-xl space-y-3">
+              {/* Box specifically explaining Native Android project commit for Build #6 */}
+              <div className="p-4 bg-emerald-950/50 border border-emerald-700/80 rounded-xl space-y-3">
                 <div className="flex items-center gap-2 font-bold text-emerald-300 text-xs">
                   <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
-                  <span>Fixed Workflow & Capacitor Dependencies (Ready for Build #5):</span>
+                  <span>Native Android Project Created & Added to Repository!</span>
                 </div>
                 <ul className="list-disc list-inside space-y-2 text-[11px] text-slate-300">
                   <li>
-                    <strong className="text-amber-300">Cause of Failure in #4:</strong> Capacitor v7 required JDK 21 and pre-installed packages in <code className="text-cyan-300 font-mono">package.json</code>.
+                    <strong className="text-amber-300">Permanent Fix:</strong> We generated the native <code className="text-emerald-300 font-mono">android/</code> directory with all Android Studio Gradle configuration files directly in your workspace.
                   </li>
                   <li>
-                    <strong className="text-emerald-400">Fix Applied:</strong> We installed <code className="text-emerald-300 font-mono">@capacitor/core</code>, <code className="text-emerald-300 font-mono">@capacitor/android</code>, and <code className="text-emerald-300 font-mono">@capacitor/cli</code> into your repo and upgraded GitHub Actions to Java JDK 21!
+                    <strong className="text-emerald-400">Streamlined GitHub Actions Workflow:</strong> GitHub Actions now simply runs <code className="text-cyan-300 font-mono">npx cap sync android</code> and builds the APK with Gradle without needing dynamic platform setup.
                   </li>
                   <li>
-                    <strong className="text-cyan-300 font-bold">Steps to run Build #5:</strong>
+                    <strong className="text-cyan-300 font-bold">Steps for your successful APK build:</strong>
                     <div className="mt-1.5 p-2.5 bg-slate-950 rounded-lg border border-slate-800 space-y-1 text-slate-200 text-[11px]">
-                      <div>1. <strong>Export / Push to GitHub</strong> from the top AI Studio project menu (or run <code className="text-emerald-400 font-mono">git push</code> in your terminal).</div>
-                      <div>2. Go to your GitHub Actions tab and tap <strong className="text-white">"Run workflow"</strong> to start <strong>Build #5</strong>!</div>
-                      <div>3. When completed with a green checkmark (✔), open the build run, scroll down to <strong className="text-amber-300">Artifacts</strong>, and tap <strong className="text-emerald-300 font-mono">CryptoMiner-Debug-APK</strong> to download!</div>
+                      <div>1. <strong>Export / Push to GitHub</strong> from AI Studio's top menu (or <code className="text-emerald-400 font-mono">git push</code>) to push the new <code className="text-amber-300">android/</code> directory to your GitHub repository.</div>
+                      <div>2. On your GitHub Actions page, tap <strong className="text-white">"Run workflow"</strong> (or let the automatic push build run).</div>
+                      <div>3. In ~2 minutes, the build will complete with a green checkmark (✔)! Scroll to the bottom <strong>Artifacts</strong> section and tap <strong className="text-emerald-300 font-mono">CryptoMiner-Debug-APK</strong> to download and install on your phone!</div>
                     </div>
                   </li>
                 </ul>

@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Crypto Miner - Stratum v1/v2 Mobile</string>
+    <string name="title_activity_main">Crypto Miner - Stratum v1/v2 Mobile</string>
+    <string name="package_name">com.cryptominer.stratum</string>
+    <string name="custom_url_scheme">com.cryptominer.stratum</string>
+</resources>

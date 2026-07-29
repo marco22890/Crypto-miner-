@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="theme-color" content="#020617" />
+    <meta name="description" content="Crypto Miner Pro - Stratum v1/v2 Mobile & Web Mining Suite with WebGPU & CPU acceleration" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="apple-touch-icon" href="/icon.png" />
+    <title>Crypto Miner Pro - Stratum v1/v2 Mobile & Web</title>
+    <script type="module" crossorigin src="/assets/index-BWLOd9eZ.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-CFUWQrAo.css">
+  </head>
+  <body class="bg-slate-950 text-slate-100 antialiased selection:bg-emerald-500 selection:text-black">
+    <div id="root"></div>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js').catch((err) => {
+            console.log('ServiceWorker registration skipped:', err);
+          });
+        });
+      }
+    </script>
+  </body>
+</html>
+
