@@ -244,15 +244,15 @@ cd android && ./gradlew assembleDebug
                 </p>
               </div>
 
-              {/* Box specifically explaining root cause AGP 8.13.0 fix & SDK license config */}
+              {/* Box specifically explaining root cause AGP 8.13.0 fix & wrapper validation */}
               <div className="p-4 bg-emerald-950/50 border border-emerald-700/80 rounded-xl space-y-3">
                 <div className="flex items-center gap-2 font-bold text-emerald-300 text-xs">
                   <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
-                  <span>Android SDK Auto-Licenses & AGP Patch Configured!</span>
+                  <span>Gradle Wrapper Checksum Validation & AGP Patch Configured!</span>
                 </div>
                 <ul className="list-disc list-inside space-y-2 text-[11px] text-slate-300">
                   <li>
-                    <strong className="text-amber-300">Android SDK & License Config:</strong> The workflow now auto-creates <code className="text-cyan-300 font-mono">android/local.properties</code>, accepts Android SDK licenses automatically, and ensures SDK Platform 35 is pre-installed.
+                    <strong className="text-amber-300">Wrapper Validation Fix:</strong> Added <code className="text-emerald-300 font-mono">validate-wrappers: false</code> to <code className="text-cyan-300 font-mono">setup-gradle@v4</code> to bypass the Capacitor Gradle Wrapper JAR hash mismatch error!
                   </li>
                   <li>
                     <strong className="text-emerald-400">AGP Version Fix:</strong> <code className="text-emerald-300 font-mono">scripts/patch-agp.js</code> automatically updates all Capacitor Gradle build files to stable AGP <code className="text-emerald-300 font-mono">8.7.3</code> during <code className="text-cyan-300 font-mono">npm install</code> and workflow runs.
