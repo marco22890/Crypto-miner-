@@ -43,7 +43,7 @@ jobs:
 
       - name: Patch AGP Version in All Gradle Files
         run: |
-          find node_modules/ android/ -type f -name "*.gradle" -exec sed -i 's/8.13.0/8.7.3/g' {} + || true
+          node scripts/patch-agp.js
 
       - name: Build Debug APK via Gradle
         run: |

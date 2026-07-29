@@ -244,25 +244,25 @@ cd android && ./gradlew assembleDebug
                 </p>
               </div>
 
-              {/* Box specifically explaining root cause AGP 8.13.0 fix */}
+              {/* Box specifically explaining root cause AGP 8.13.0 fix & Node warning */}
               <div className="p-4 bg-emerald-950/50 border border-emerald-700/80 rounded-xl space-y-3">
                 <div className="flex items-center gap-2 font-bold text-emerald-300 text-xs">
                   <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
-                  <span>Post-Sync AGP Patch Order & SDK Download Fixed!</span>
+                  <span>AGP Patch Script & Node.js 22 Workflow Configured!</span>
                 </div>
                 <ul className="list-disc list-inside space-y-2 text-[11px] text-slate-300">
                   <li>
-                    <strong className="text-amber-300">Issue Addressed:</strong> <code className="text-cyan-300 font-mono">npx cap sync android</code> was re-generating Cordova plugin Gradle files with unreleased AGP <code className="text-rose-400 font-mono">8.13.0</code> after the pre-build patch.
+                    <strong className="text-amber-300">About the Yellow Warning:</strong> The annotation <code className="text-amber-300 font-mono">Node.js 20 is deprecated...</code> is a harmless notice from GitHub's runner system. It does <strong>not</strong> cause the build failure.
                   </li>
                   <li>
-                    <strong className="text-emerald-400">Fix Applied:</strong> We moved the AGP patch step to run <em className="text-emerald-300 font-semibold">after</em> <code className="text-cyan-300 font-mono">npx cap sync android</code> across all Gradle files and added <code className="text-amber-300 font-mono">android.builder.sdkDownload=true</code>!
+                    <strong className="text-emerald-400">Actual Fix Applied:</strong> We created <code className="text-emerald-300 font-mono">scripts/patch-agp.js</code> and added it to <code className="text-cyan-300 font-mono">package.json</code> postinstall + GitHub Actions. This automatically replaces unreleased AGP <code className="text-rose-400 font-mono">8.13.0</code> in <code className="text-amber-300 font-mono">@capacitor/android</code> with stable <code className="text-emerald-300 font-mono">8.7.3</code>!
                   </li>
                   <li>
-                    <strong className="text-cyan-300 font-bold">Steps to run your successful APK build:</strong>
+                    <strong className="text-cyan-300 font-bold">Steps to run your successful build:</strong>
                     <div className="mt-1.5 p-2.5 bg-slate-950 rounded-lg border border-slate-800 space-y-1 text-slate-200 text-[11px]">
                       <div>1. <strong>Export / Push to GitHub</strong> from the top project menu in AI Studio (or run <code className="text-emerald-400 font-mono">git push</code>).</div>
                       <div>2. On GitHub, go to the <strong>Actions</strong> tab and tap <strong className="text-white">"Run workflow"</strong>.</div>
-                      <div>3. In ~2 minutes, the build will finish with a green checkmark (✔)! Scroll down to <strong className="text-amber-300">Artifacts</strong> and tap <strong className="text-emerald-300 font-mono">CryptoMiner-Debug-APK</strong> to download and install!</div>
+                      <div>3. In ~2 minutes, the build will finish with a green checkmark (✔)! Scroll down to <strong className="text-amber-300">Artifacts</strong> and tap <strong className="text-emerald-300 font-mono">CryptoMiner-Debug-APK</strong> to download!</div>
                     </div>
                   </li>
                 </ul>
