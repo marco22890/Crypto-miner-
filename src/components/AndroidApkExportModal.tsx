@@ -244,18 +244,18 @@ cd android && ./gradlew assembleDebug
                 </p>
               </div>
 
-              {/* Box specifically explaining root cause fixes: JDK 17 + SDK licenses + AGP 8.7.3 patch */}
+              {/* Box specifically explaining root cause fixes: Gradle 8.11.1 + wrapper regeneration + AGP 8.7.3 patch */}
               <div className="p-4 bg-emerald-950/50 border border-emerald-700/80 rounded-xl space-y-3">
                 <div className="flex items-center gap-2 font-bold text-emerald-300 text-xs">
                   <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
-                  <span>SDK License Acceptance & Gradle Multi-Invocation Fix Applied!</span>
+                  <span>Official Gradle 8.11.1 & Wrapper Auto-Regeneration Applied!</span>
                 </div>
                 <ul className="list-disc list-inside space-y-2 text-[11px] text-slate-300">
                   <li>
-                    <strong className="text-amber-300">Android SDK & License Config:</strong> The workflow automatically accepts all SDK licenses (<code className="text-emerald-300 font-mono">sdkmanager --licenses</code>) and installs Android SDK Platform 35.
+                    <strong className="text-amber-300">Gradle 8.11.1 Runner Setup:</strong> The workflow now uses <code className="text-cyan-300 font-mono">setup-gradle@v4</code> with <code className="text-emerald-300 font-mono">gradle-version: '8.11.1'</code> to ensure the correct Gradle version is installed on PATH.
                   </li>
                   <li>
-                    <strong className="text-cyan-300">Resilient Build Execution:</strong> Uses Java JDK 17 LTS with automatic fallback (<code className="text-emerald-300 font-mono">./gradlew assembleDebug || gradle assembleDebug</code>) to prevent wrapper execution errors.
+                    <strong className="text-cyan-300">Clean Wrapper Regeneration:</strong> Automatically runs <code className="text-emerald-300 font-mono">gradle wrapper --gradle-version 8.11.1</code> before building to prevent any wrapper JAR corruption.
                   </li>
                   <li>
                     <strong className="text-emerald-400">Automated AGP Patch & .gitattributes:</strong> Ensures AGP <code className="text-emerald-300 font-mono">8.7.3</code> and binary file protections (<code className="text-cyan-300 font-mono">.gitattributes</code>) are applied cleanly across all builds.
