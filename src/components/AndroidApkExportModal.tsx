@@ -244,25 +244,25 @@ cd android && ./gradlew assembleDebug
                 </p>
               </div>
 
-              {/* Box specifically helping with the failure screenshot */}
+              {/* Box specifically helping with Build #3 failure screenshot */}
               <div className="p-4 bg-amber-950/40 border border-amber-800/80 rounded-xl space-y-3">
                 <div className="flex items-center gap-2 font-bold text-amber-400 text-xs">
                   <AlertTriangle className="w-4 h-4 text-amber-400 flex-shrink-0" />
-                  <span>Fixing "Dependencies lock file is not found" (Workflow Build Fix):</span>
+                  <span>Fixing Build #3 Failure (`cap init` duplicate config check):</span>
                 </div>
                 <ul className="list-disc list-inside space-y-2 text-[11px] text-slate-300">
                   <li>
-                    <strong className="text-amber-300">Cause of Failure in #2:</strong> GitHub's <code className="text-rose-400">setup-node</code> step was looking for a <code className="text-amber-300 font-mono">package-lock.json</code> file that wasn't committed to the repo yet.
+                    <strong className="text-amber-300">Cause of Failure in #3:</strong> <code className="text-rose-400 font-mono">npx cap init</code> failed because <code className="text-cyan-300 font-mono">capacitor.config.json</code> was already created in your repo.
                   </li>
                   <li>
-                    <strong className="text-emerald-400">We just updated your workflow file!</strong> We removed the lock file check in <code className="text-cyan-300 font-mono">.github/workflows/build-apk.yml</code> so `npm install` runs smoothly without errors.
+                    <strong className="text-emerald-400">Fixed in workflow!</strong> We updated <code className="text-cyan-300 font-mono">.github/workflows/build-apk.yml</code> to safely bypass re-initialization and automatically run <code className="text-emerald-300 font-mono">npx cap sync android</code>.
                   </li>
                   <li>
-                    <strong className="text-cyan-300 font-bold">How to trigger Build #3 now:</strong>
+                    <strong className="text-cyan-300 font-bold">Steps to trigger Build #4:</strong>
                     <div className="mt-1.5 p-2.5 bg-slate-950 rounded-lg border border-slate-800 space-y-1 text-slate-200 text-[11px]">
-                      <div>1. <strong>Export / Push to GitHub</strong> from the top AI Studio menu (or via <code className="text-emerald-400 font-mono">git push</code> in your repo).</div>
-                      <div>2. On your GitHub Actions screen, tap <strong>"Run workflow"</strong> again to trigger <strong>Build #3</strong>!</div>
-                      <div>3. It will finish with a green checkmark (✔) in ~2 minutes and provide your downloadable <strong className="text-emerald-300">CryptoMiner-Debug-APK</strong> under Artifacts!</div>
+                      <div>1. <strong>Export / Push to GitHub</strong> from the top AI Studio project menu (or run <code className="text-emerald-400 font-mono">git push</code>).</div>
+                      <div>2. On your GitHub Actions page, tap <strong>"Run workflow"</strong> to start <strong>Build #4</strong>!</div>
+                      <div>3. In ~2 minutes, open <strong>Build #4</strong>, scroll to the bottom <strong>Artifacts</strong> section, and tap <strong className="text-emerald-300 font-mono">CryptoMiner-Debug-APK</strong> to install!</div>
                     </div>
                   </li>
                 </ul>

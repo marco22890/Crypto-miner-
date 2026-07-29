@@ -34,11 +34,12 @@ jobs:
         run: |
           npm run build
 
-      - name: Install Capacitor & Add Android Platform
+      - name: Add Android Platform & Sync
         run: |
           npm install @capacitor/core @capacitor/cli @capacitor/android
-          npx cap init "CryptoMiner" "com.cryptominer.stratum" --web-dir dist
-          npx cap add android
+          if [ ! -d "android" ]; then
+            npx cap add android
+          fi
           npx cap sync android
 
       - name: Build Debug APK via Gradle
