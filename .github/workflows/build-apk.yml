@@ -26,6 +26,9 @@ jobs:
           distribution: 'temurin'
           java-version: '21'
 
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
@@ -47,18 +50,11 @@ jobs:
         run: |
           node scripts/patch-agp.js
 
-      - name: Setup Android SDK Environment & Licenses
+      - name: Configure Android SDK Path
         run: |
-          echo "sdk.dir=/usr/local/lib/android/sdk" > android/local.properties
-          mkdir -p /usr/local/lib/android/sdk/licenses
-          printf "2433370230631372502804300305886f345513d8\n84831b9409646a918e30573bab4c9c91346d8abd\nd975465961bed804676be67376f23aea4b417128\ne96725b30306157f978203398309291a4a27072a" > /usr/local/lib/android/sdk/licenses/android-sdk-license || true
-          yes | /usr/local/lib/android/sdk/cmdline-tools/latest/bin/sdkmanager --licenses || true
-          /usr/local/lib/android/sdk/cmdline-tools/latest/bin/sdkmanager "platforms;android-35" "build-tools;35.0.0" || true
+          echo "sdk.dir=$ANDROID_HOME" > android/local.properties
 
       - name: Build Debug APK via Gradle
-        env:
-          ANDROID_HOME: /usr/local/lib/android/sdk
-          ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
         run: |
           cd android
           chmod +x gradlew
@@ -69,3 +65,4 @@ jobs:
         with:
           name: CryptoMiner-Debug-APK
           path: android/app/build/outputs/apk/debug/app-debug.apk
+

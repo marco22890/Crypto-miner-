@@ -244,24 +244,27 @@ cd android && ./gradlew assembleDebug
                 </p>
               </div>
 
-              {/* Box specifically explaining root cause AGP 8.13.0 fix & wrapper validation */}
+              {/* Box specifically explaining root cause fixes: wrapper validation + AGP 8.13 patch + setup-android */}
               <div className="p-4 bg-emerald-950/50 border border-emerald-700/80 rounded-xl space-y-3">
                 <div className="flex items-center gap-2 font-bold text-emerald-300 text-xs">
                   <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
-                  <span>Gradle Wrapper Checksum Validation & AGP Patch Configured!</span>
+                  <span>Workflow Architecture & AGP Patch Fixes Applied!</span>
                 </div>
                 <ul className="list-disc list-inside space-y-2 text-[11px] text-slate-300">
                   <li>
                     <strong className="text-amber-300">Wrapper Validation Fix:</strong> Added <code className="text-emerald-300 font-mono">validate-wrappers: false</code> to <code className="text-cyan-300 font-mono">setup-gradle@v4</code> to bypass the Capacitor Gradle Wrapper JAR hash mismatch error!
                   </li>
                   <li>
-                    <strong className="text-emerald-400">AGP Version Fix:</strong> <code className="text-emerald-300 font-mono">scripts/patch-agp.js</code> automatically updates all Capacitor Gradle build files to stable AGP <code className="text-emerald-300 font-mono">8.7.3</code> during <code className="text-cyan-300 font-mono">npm install</code> and workflow runs.
+                    <strong className="text-emerald-400">Android SDK Setup:</strong> Configured official <code className="text-cyan-300 font-mono">android-actions/setup-android@v3</code> with automatic SDK licenses and <code className="text-emerald-300 font-mono">sdk.dir=$ANDROID_HOME</code>.
+                  </li>
+                  <li>
+                    <strong className="text-cyan-300">Automated AGP Patch:</strong> Enhanced <code className="text-emerald-300 font-mono">scripts/patch-agp.js</code> scans all Gradle files across the repository to ensure stable AGP <code className="text-emerald-300 font-mono">8.7.3</code> is used.
                   </li>
                   <li>
                     <strong className="text-cyan-300 font-bold">Steps to run your build:</strong>
                     <div className="mt-1.5 p-2.5 bg-slate-950 rounded-lg border border-slate-800 space-y-1 text-slate-200 text-[11px]">
                       <div>1. <strong>Export / Push to GitHub</strong> from the top project menu in AI Studio (or run <code className="text-emerald-400 font-mono">git push</code>).</div>
-                      <div>2. On GitHub, navigate to <strong>Actions</strong> and tap <strong className="text-white font-bold">"Run workflow"</strong>.</div>
+                      <div>2. On GitHub, navigate to <strong>Actions</strong> tab and tap <strong className="text-white font-bold">"Run workflow"</strong>.</div>
                       <div>3. In ~2 minutes, the build will complete with a green checkmark (✔)! Scroll down to <strong className="text-amber-300 font-bold font-mono">Artifacts</strong> and tap <strong className="text-emerald-300 font-mono font-bold">CryptoMiner-Debug-APK</strong> to download!</div>
                     </div>
                   </li>
