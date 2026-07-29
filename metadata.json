@@ -1,0 +1,6 @@
+{
+  "name": "Crypto Miner - SHA256d, RandomX XMR & Stratum V2",
+  "description": "Multi-algorithm cryptocurrency miner supporting SHA-256d and RandomX (Monero XMR) with Stratum V2 Noise_NX binary protocol, sub-channels, HashVault pool support, and live telemetry.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
