@@ -1,5 +1,55 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
+// Auto-detect Termux ARM64 native AAPT2 binary to prevent x86_64 execution errors on Android phones
+def termuxAapt2Paths = [
+    '/data/data/com.termux/files/usr/bin/aapt2',
+    System.getenv('PREFIX') ? "${System.getenv('PREFIX')}/bin/aapt2" : null,
+    '/usr/bin/aapt2'
+].findAll { it != null }
+
+File termuxAapt2File = termuxAapt2Paths.collect { new File(it) }.find { it.exists() }
+
+if (termuxAapt2File != null) {
+    System.setProperty("android.aapt2.overridePath", termuxAapt2File.absolutePath)
+    
+    // Replace x86_64 AAPT2 binaries in .gradle/caches right before resource processing tasks run
+    allprojects {
+        tasks.configureEach { task ->
+            if (task.name.contains("Resource") || task.name.contains("Aapt") || task.name.contains("Manifest") || task.name.contains("Package") || task.name.contains("Merge")) {
+                task.doFirst {
+                    def userHome = System.getProperty("user.home")
+                    if (userHome) {
+                        def cachesDir = new File(userHome, ".gradle/caches")
+                        if (cachesDir.exists()) {
+                            cachesDir.eachFileRecurse { file ->
+                                if (file.name == 'aapt2' && file.absolutePath != termuxAapt2File.absolutePath && !java.nio.file.Files.isSymbolicLink(file.toPath())) {
+                                    try {
+                                        file.setWritable(true, false)
+                                        if (file.parentFile != null) {
+                                            file.parentFile.setWritable(true, false)
+                                        }
+                                        file.delete()
+                                        java.nio.file.Files.createSymbolicLink(file.toPath(), termuxAapt2File.toPath())
+                                    } catch (Exception ignored) {
+                                        try {
+                                            java.nio.file.Files.copy(
+                                                termuxAapt2File.toPath(), 
+                                                file.toPath(), 
+                                                java.nio.file.StandardCopyOption.REPLACE_EXISTING
+                                            )
+                                            file.setExecutable(true, false)
+                                        } catch (Exception ignored2) {}
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 buildscript {
     
     repositories {

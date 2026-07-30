@@ -15,10 +15,20 @@ android {
              // Default: https://android.googlesource.com/platform/frameworks/base/+/282e181b58cf72b6ca770dc7ca5f91f135444502/tools/aapt/AaptAssets.cpp#61
             ignoreAssetsPattern = '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
         }
+        // Support native Termux AAPT2 binary on ARM64 Android devices
+        def termuxAapt2 = new File('/data/data/com.termux/files/usr/bin/aapt2')
+        if (!termuxAapt2.exists() && System.getenv('PREFIX') != null) {
+            termuxAapt2 = new File("${System.getenv('PREFIX')}/bin/aapt2")
+        }
+        if (termuxAapt2.exists()) {
+            aaptOptions {
+                aapt2FromMaven = false
+            }
+        }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_21
-        targetCompatibility JavaVersion.VERSION_21
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
     buildTypes {
         release {

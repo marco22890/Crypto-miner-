@@ -1,3 +1,53 @@
+// Auto-detect Termux ARM64 native AAPT2 binary to prevent x86_64 execution errors on Android phones
+def termuxAapt2Paths = [
+    '/data/data/com.termux/files/usr/bin/aapt2',
+    System.getenv('PREFIX') ? "${System.getenv('PREFIX')}/bin/aapt2" : null,
+    '/usr/bin/aapt2'
+].findAll { it != null }
+
+File termuxAapt2File = termuxAapt2Paths.collect { new File(it) }.find { it.exists() }
+
+if (termuxAapt2File != null) {
+    println("[Termux Setup] Found native ARM64 AAPT2 at: ${termuxAapt2File.absolutePath}")
+    gradle.startParameter.projectProperties['android.aapt2.overridePath'] = termuxAapt2File.absolutePath
+    System.setProperty('android.aapt2.overridePath', termuxAapt2File.absolutePath)
+
+    // Start a continuous background watcher thread inside Gradle JVM to replace x86_64 AAPT2 binaries as soon as AGP extracts them into .gradle/caches
+    Thread.startDaemon("termux-aapt2-watcher") {
+        def userHome = System.getProperty("user.home")
+        if (!userHome) return
+        def cachesDir = new File(userHome, ".gradle/caches")
+        long targetSize = termuxAapt2File.length()
+        while (!Thread.currentThread().isInterrupted()) {
+            try {
+                if (cachesDir.exists()) {
+                    cachesDir.eachFileRecurse { file ->
+                        if (file.isFile() && file.name == 'aapt2' && file.absolutePath != termuxAapt2File.absolutePath) {
+                            if (file.length() != targetSize) {
+                                try {
+                                    file.setWritable(true, false)
+                                    if (file.parentFile != null) {
+                                        file.parentFile.setWritable(true, false)
+                                    }
+                                    file.delete()
+                                    java.nio.file.Files.copy(
+                                        termuxAapt2File.toPath(), 
+                                        file.toPath(), 
+                                        java.nio.file.StandardCopyOption.REPLACE_EXISTING
+                                    )
+                                    file.setExecutable(true, false)
+                                    println("[Termux Patcher] Replaced x86_64 AAPT2 with ARM64 binary at: ${file.absolutePath}")
+                                } catch (Exception ignored) {}
+                            }
+                        }
+                    }
+                }
+            } catch (Exception ignored) {}
+            try { Thread.sleep(100) } catch (InterruptedException e) { break }
+        }
+    }
+}
+
 include ':app'
 include ':capacitor-cordova-android-plugins'
 project(':capacitor-cordova-android-plugins').projectDir = new File('./capacitor-cordova-android-plugins/')

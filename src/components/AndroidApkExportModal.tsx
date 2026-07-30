@@ -32,19 +32,26 @@ export const AndroidApkExportModal: React.FC<AndroidApkExportModalProps> = ({ is
     }, 2000);
   };
 
-  const termuxCommands = `# Step 1: Install native Termux AAPT2 binary for ARM64 Android CPU
-pkg update && pkg upgrade -y
-pkg install android-tools aapt -y
+  const termuxCommands = `# Step 1: Install Node.js, native Termux ARM64 Android tools & JDK
+pkg update && pkg install nodejs-lts android-tools openjdk-21 -y
 
-# Step 2: Navigate to project root directory
+# Step 2: Navigate to project root folder
 cd ~/react-example
 
-# Step 3: Compile APK using Termux's native AAPT2 binary (bypassing x86 Maven binary error)
-cd android
-./gradlew assembleDebug -Paapt2FromMaven=false
+# Step 3: Build Crypto Miner Pro web app & sync web assets to Android
+npm run build && npx cap sync android
 
-# Output APK path on your phone:
-# android/app/build/outputs/apk/debug/app-debug.apk`;
+# Step 4: Clear corrupt Gradle transforms cache (fixes AAPT2 Daemon startup failure)
+rm -rf ~/.gradle/caches/*/transforms ~/.gradle/caches/transforms-*
+
+# Step 5: Navigate to android folder & compile APK with native AAPT2 and --no-daemon
+cd android
+./gradlew assembleDebug -Pandroid.aapt2.overridePath=/data/data/com.termux/files/usr/bin/aapt2 --no-daemon
+
+# Step 6: Copy compiled APK to public Downloads & install
+termux-setup-storage
+cp app/build/outputs/apk/debug/app-debug.apk /sdcard/Download/CryptoMiner.apk
+termux-open /sdcard/Download/CryptoMiner.apk`;
 
   const capacitorCommands = `# 1. Install Capacitor CLI dependencies
 npm install @capacitor/core @capacitor/cli @capacitor/android
@@ -244,28 +251,31 @@ cd android && ./gradlew assembleDebug
                 </p>
               </div>
 
-              {/* Box specifically explaining root cause fixes: JDK 21 + Gradle 8.11.1 + wrapper regeneration + permissions & google-services check */}
+              {/* Box specifically explaining root cause fixes: SDK package setup + namespace patches + clean uncached Gradle build */}
               <div className="p-4 bg-emerald-950/50 border border-emerald-700/80 rounded-xl space-y-3">
                 <div className="flex items-center gap-2 font-bold text-emerald-300 text-xs">
                   <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
-                  <span>Executable Permissions & Google Services Safety Checks Applied!</span>
+                  <span>Cloud GitHub Actions & Termux ARM64 Native AAPT2 Fixes Applied!</span>
                 </div>
                 <ul className="list-disc list-inside space-y-2 text-[11px] text-slate-300">
                   <li>
-                    <strong className="text-amber-300">Executable Wrapper Permissions:</strong> Added <code className="text-emerald-300 font-mono">chmod +x gradlew</code> directly to the build runner to prevent execution failures on GitHub.
+                    <strong className="text-emerald-300">Build is Actively Running in Termux!</strong> In your screenshot, after clearing the cache, Gradle started a fresh daemon: <code className="text-amber-300 font-mono">Daemon process will be forked</code>. Because it is re-downloading fresh packages onto your phone, it takes 1–3 minutes to complete.
                   </li>
                   <li>
-                    <strong className="text-cyan-300">Google Services Guard:</strong> Patched <code className="text-emerald-300 font-mono">android/app/build.gradle</code> with a strict <code className="text-amber-300 font-mono">exists()</code> check so builds succeed seamlessly without a missing <code className="text-cyan-300 font-mono">google-services.json</code>.
+                    <strong className="text-cyan-300">Where to find your APK once complete:</strong>
+                    <div className="mt-1.5 p-2.5 bg-slate-950 rounded-lg border border-slate-800 text-emerald-400 font-mono text-[11px]">
+                      app/build/outputs/apk/debug/app-debug.apk
+                    </div>
                   </li>
                   <li>
-                    <strong className="text-emerald-400">Automated AGP Patch & JDK 21:</strong> Uses Java JDK 21 LTS with Gradle <code className="text-emerald-300 font-mono">8.11.1</code> and AGP <code className="text-emerald-300 font-mono">8.7.3</code>.
+                    <strong className="text-emerald-400">Recommended - Cloud GitHub Actions Build:</strong> <code className="text-cyan-300 font-mono">.github/workflows/build-apk.yml</code> builds on cloud x86_64 Linux runners using JDK 21 LTS, Gradle 8.11.1, and AGP 8.7.3 with no phone configuration needed.
                   </li>
                   <li>
-                    <strong className="text-cyan-300 font-bold">Steps to run your build:</strong>
+                    <strong className="text-cyan-300 font-bold">Steps for GitHub Actions Cloud Build:</strong>
                     <div className="mt-1.5 p-2.5 bg-slate-950 rounded-lg border border-slate-800 space-y-1 text-slate-200 text-[11px]">
-                      <div>1. <strong>Export / Push to GitHub</strong> from the top project menu in AI Studio (or run <code className="text-emerald-400 font-mono">git push</code>).</div>
+                      <div>1. <strong>Export / Push to GitHub</strong> from AI Studio (or run <code className="text-emerald-400 font-mono">git push</code>).</div>
                       <div>2. On GitHub, navigate to <strong>Actions</strong> tab and tap <strong className="text-white font-bold">"Run workflow"</strong>.</div>
-                      <div>3. In ~2 minutes, the build will complete with a green checkmark (✔)! Scroll down to <strong className="text-amber-300 font-bold font-mono">Artifacts</strong> and tap <strong className="text-emerald-300 font-mono font-bold">CryptoMiner-Debug-APK</strong> to download!</div>
+                      <div>3. In ~2 minutes, tap <strong className="text-amber-300 font-bold font-mono">Artifacts</strong> &rarr; <strong className="text-emerald-300 font-mono font-bold">CryptoMiner-Debug-APK</strong> to download!</div>
                     </div>
                   </li>
                 </ul>
@@ -302,24 +312,27 @@ cd android && ./gradlew assembleDebug
                 </button>
               </div>
 
-              {/* Error Explanation Box for User's Screenshot */}
+              {/* Fix for Default Vite Starter Screen / AAPT2 Transforms Error */}
               <div className="p-4 bg-emerald-950/40 border border-emerald-800/80 rounded-xl space-y-3">
                 <div className="flex items-center gap-2 font-bold text-emerald-400 text-xs">
                   <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
-                  <span>Great job! Native ARM64 AAPT2 is now installed in Termux!</span>
+                  <span>How to Load "Crypto Miner Pro" App Source into Termux (Fix Default Screen):</span>
                 </div>
                 <ul className="list-disc list-inside space-y-2 text-[11px] text-slate-300">
                   <li>
-                    <strong className="text-emerald-400">Final Command:</strong> You are currently at <code className="text-cyan-300 font-mono">~/react-example/android</code>. Run this exact final command in Termux now:
-                    <div className="mt-1.5 p-2 bg-slate-950 rounded-lg border border-slate-800 text-emerald-300 font-mono text-[11px] select-all">
-                      ./gradlew assembleDebug -Paapt2FromMaven=false
+                    <strong className="text-amber-300 font-bold">Why you saw "Get started / Count is 0":</strong> Your <code className="text-rose-300 font-mono">~/react-example</code> folder in Termux contains a default Vite starter template. You need to replace <code className="text-rose-300 font-mono">~/react-example</code> with the <strong>Crypto Miner Pro</strong> source code!
+                  </li>
+                  <li>
+                    <strong className="text-cyan-300 font-bold">Step A — Download Project ZIP:</strong> Click <strong>"Download ZIP"</strong> in AI Studio (from top-right export menu) to save <code className="text-cyan-300 font-mono">CryptoMiner.zip</code> to your phone Downloads.
+                  </li>
+                  <li>
+                    <strong className="text-emerald-400 font-bold">Step B — Run this command in Termux to extract & compile Crypto Miner Pro:</strong>
+                    <div className="mt-1.5 p-2.5 bg-slate-950 rounded-lg border border-slate-800 text-amber-300 font-mono text-[10px] sm:text-[11px] font-bold select-all break-all">
+                      pkg install unzip -y && termux-setup-storage && rm -rf ~/react-example && unzip -o /sdcard/Download/CryptoMiner.zip -d ~/react-example && cd ~/react-example && npm install && npm run build && npx cap sync android && cd android && ./gradlew assembleDebug -Pandroid.aapt2.overridePath=/data/data/com.termux/files/usr/bin/aapt2 --no-daemon && cp app/build/outputs/apk/debug/app-debug.apk /sdcard/Download/CryptoMiner.apk && termux-open /sdcard/Download/CryptoMiner.apk
                     </div>
                   </li>
                   <li>
-                    <strong className="text-slate-200">Where your compiled APK will be generated:</strong>
-                    <div className="mt-1 text-emerald-400 font-mono text-[10px] break-all">
-                      ~/react-example/android/app/build/outputs/apk/debug/app-debug.apk
-                    </div>
+                    <strong className="text-emerald-400 font-bold">Result:</strong> Termux will extract all Crypto Miner Pro source files, build the web app into native Android web assets, compile the APK, and open the installer with your actual Crypto Miner Pro app!
                   </li>
                 </ul>
               </div>

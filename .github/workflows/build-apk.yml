@@ -28,11 +28,13 @@ jobs:
 
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
+        with:
+          packages: 'platforms;android-35 platforms;android-36 build-tools;35.0.0'
 
       - name: Accept Android SDK Licenses & Install Platforms
         run: |
-          yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || true
-          $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "platforms;android-35" "platforms;android-36" "build-tools;35.0.0" || true
+          yes | sdkmanager --licenses || true
+          sdkmanager "platforms;android-35" "platforms;android-36" "build-tools;35.0.0" || true
 
       - name: Install Dependencies
         run: |
@@ -46,7 +48,7 @@ jobs:
         run: |
           npx cap sync android
 
-      - name: Patch AGP Version in All Gradle Files
+      - name: Patch AGP Version & Namespaces in All Gradle Files
         run: |
           node scripts/patch-agp.js
 
@@ -59,6 +61,7 @@ jobs:
         with:
           gradle-version: '8.11.1'
           validate-wrappers: false
+          cache-disabled: true
 
       - name: Regenerate Clean Gradle Wrapper
         run: |
@@ -70,7 +73,7 @@ jobs:
         run: |
           cd android
           chmod +x gradlew
-          ./gradlew assembleDebug --no-daemon --stacktrace
+          ./gradlew assembleDebug --no-daemon --no-build-cache --stacktrace || gradle assembleDebug --no-daemon --no-build-cache --stacktrace
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
