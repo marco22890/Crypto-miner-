@@ -244,21 +244,21 @@ cd android && ./gradlew assembleDebug
                 </p>
               </div>
 
-              {/* Box specifically explaining root cause fixes: JDK 21 + Gradle 8.11.1 + wrapper regeneration + AGP 8.7.3 patch */}
+              {/* Box specifically explaining root cause fixes: JDK 21 + Gradle 8.11.1 + wrapper regeneration + permissions & google-services check */}
               <div className="p-4 bg-emerald-950/50 border border-emerald-700/80 rounded-xl space-y-3">
                 <div className="flex items-center gap-2 font-bold text-emerald-300 text-xs">
                   <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
-                  <span>Java JDK 21 & Gradle 8.11.1 Fully Aligned for Capacitor 7!</span>
+                  <span>Executable Permissions & Google Services Safety Checks Applied!</span>
                 </div>
                 <ul className="list-disc list-inside space-y-2 text-[11px] text-slate-300">
                   <li>
-                    <strong className="text-amber-300">Java JDK 21 Environment:</strong> Configured <code className="text-cyan-300 font-mono">setup-java@v4</code> with JDK 21 LTS and aligned all project Gradle files to <code className="text-emerald-300 font-mono">JavaVersion.VERSION_21</code> for Capacitor 7.
+                    <strong className="text-amber-300">Executable Wrapper Permissions:</strong> Added <code className="text-emerald-300 font-mono">chmod +x gradlew</code> directly to the build runner to prevent execution failures on GitHub.
                   </li>
                   <li>
-                    <strong className="text-cyan-300">Clean Wrapper Regeneration:</strong> Uses <code className="text-emerald-300 font-mono">setup-gradle@v4</code> (Gradle 8.11.1) and automatically regenerates a clean Gradle wrapper before building.
+                    <strong className="text-cyan-300">Google Services Guard:</strong> Patched <code className="text-emerald-300 font-mono">android/app/build.gradle</code> with a strict <code className="text-amber-300 font-mono">exists()</code> check so builds succeed seamlessly without a missing <code className="text-cyan-300 font-mono">google-services.json</code>.
                   </li>
                   <li>
-                    <strong className="text-emerald-400">Automated AGP Patch & .gitattributes:</strong> Patches AGP to stable <code className="text-emerald-300 font-mono">8.7.3</code> and protects binary assets from line-ending corruption.
+                    <strong className="text-emerald-400">Automated AGP Patch & JDK 21:</strong> Uses Java JDK 21 LTS with Gradle <code className="text-emerald-300 font-mono">8.11.1</code> and AGP <code className="text-emerald-300 font-mono">8.7.3</code>.
                   </li>
                   <li>
                     <strong className="text-cyan-300 font-bold">Steps to run your build:</strong>
