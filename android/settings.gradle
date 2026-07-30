@@ -9,7 +9,6 @@ File termuxAapt2File = termuxAapt2Paths.collect { new File(it) }.find { it.exist
 
 if (termuxAapt2File != null) {
     println("[Termux Setup] Found native ARM64 AAPT2 at: ${termuxAapt2File.absolutePath}")
-    gradle.startParameter.projectProperties['android.aapt2.overridePath'] = termuxAapt2File.absolutePath
     System.setProperty('android.aapt2.overridePath', termuxAapt2File.absolutePath)
 
     // Start a continuous background watcher thread inside Gradle JVM to replace x86_64 AAPT2 binaries as soon as AGP extracts them into .gradle/caches
