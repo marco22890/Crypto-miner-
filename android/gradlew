@@ -268,6 +268,22 @@ if [ -n "$TERMUX_AAPT2" ]; then
 
     GRADLE_OPTS="$GRADLE_OPTS -Dandroid.aapt2.overridePath=$TERMUX_AAPT2"
     set -- "-Pandroid.aapt2.overridePath=$TERMUX_AAPT2" "$@"
+
+    WRAPPER_JAR="$APP_HOME/gradle/wrapper/gradle-wrapper.jar"
+    if ! jar tf "$WRAPPER_JAR" >/dev/null 2>&1; then
+        echo "[Termux Fix] gradle-wrapper.jar is invalid/corrupted. Auto-downloading clean wrapper..."
+        mkdir -p "$APP_HOME/gradle/wrapper"
+        curl -sSL "https://raw.githubusercontent.com/gradle/gradle/master/gradle/wrapper/gradle-wrapper.jar" -o "$WRAPPER_JAR" 2>/dev/null || \
+        curl -sSL "https://github.com/gradle/gradle/raw/v8.11.1/gradle/wrapper/gradle-wrapper.jar" -o "$WRAPPER_JAR" 2>/dev/null || \
+        wget -q "https://raw.githubusercontent.com/gradle/gradle/master/gradle/wrapper/gradle-wrapper.jar" -O "$WRAPPER_JAR" 2>/dev/null
+        
+        if ! jar tf "$WRAPPER_JAR" >/dev/null 2>&1; then
+            if command -v gradle >/dev/null 2>&1; then
+                echo "[Termux Fix] Falling back to Termux system gradle..."
+                exec gradle "$@"
+            fi
+        fi
+    fi
 fi
 
 # Collect all arguments for the java command:

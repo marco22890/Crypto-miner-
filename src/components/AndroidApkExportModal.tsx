@@ -32,24 +32,31 @@ export const AndroidApkExportModal: React.FC<AndroidApkExportModalProps> = ({ is
     }, 2000);
   };
 
-  const termuxCommands = `# Step 1: Install Node.js, native Termux ARM64 Android tools & JDK
-pkg update && pkg install nodejs-lts android-tools openjdk-21 -y
+  const termuxCommands = `# Step 1: Always cd ~ to home directory first, install packages (including system gradle fallback) & setup storage
+cd ~ && pkg update && pkg install nodejs-lts android-tools openjdk-21 gradle unzip -y
+termux-setup-storage
 
-# Step 2: Navigate to project root folder
-cd ~/react-example
+# Step 2: Auto-detect latest downloaded project ZIP in /sdcard/Download/ and extract if present
+ZIP_FILE=$(ls -t /sdcard/Download/*.zip 2>/dev/null | head -n 1)
+if [ -n "$ZIP_FILE" ]; then
+  echo "Extracting project ZIP: $ZIP_FILE"
+  rm -rf ~/react-example
+  unzip -o "$ZIP_FILE" -d ~/react-example
+fi
 
-# Step 3: Build Crypto Miner Pro web app & sync web assets to Android
+# Step 3: Navigate to project, install dependencies, build web app & sync web assets to Android
+cd ~/react-example && npm install
 npm run build && npx cap sync android
 
-# Step 4: Clear corrupt Gradle transforms cache (fixes AAPT2 Daemon startup failure)
+# Step 4: Clear corrupt Gradle transforms cache (fixes AAPT2 x86_64 Daemon failure)
 rm -rf ~/.gradle/caches/*/transforms ~/.gradle/caches/transforms-*
 
-# Step 5: Navigate to android folder & compile APK with native AAPT2 and --no-daemon
+# Step 5: Navigate to android folder, grant execute permissions to gradlew, & compile APK
 cd android
-./gradlew assembleDebug -Pandroid.aapt2.overridePath=/data/data/com.termux/files/usr/bin/aapt2 --no-daemon
+chmod +x gradlew
+./gradlew assembleDebug -Pandroid.aapt2.overridePath=/data/data/com.termux/files/usr/bin/aapt2 --no-daemon || gradle assembleDebug -Pandroid.aapt2.overridePath=/data/data/com.termux/files/usr/bin/aapt2 --no-daemon
 
 # Step 6: Copy compiled APK to public Downloads & install
-termux-setup-storage
 cp app/build/outputs/apk/debug/app-debug.apk /sdcard/Download/CryptoMiner.apk
 termux-open /sdcard/Download/CryptoMiner.apk`;
 
@@ -312,29 +319,42 @@ cd android && ./gradlew assembleDebug
                 </button>
               </div>
 
-              {/* Fix for Default Vite Starter Screen / AAPT2 Transforms Error */}
-              <div className="p-4 bg-emerald-950/40 border border-emerald-800/80 rounded-xl space-y-3">
-                <div className="flex items-center gap-2 font-bold text-emerald-400 text-xs">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
-                  <span>How to Load "Crypto Miner Pro" App Source into Termux (Fix Default Screen):</span>
+              {/* How to Find Download ZIP in AI Studio */}
+              <div className="p-4 bg-amber-950/40 border border-amber-800/80 rounded-xl space-y-3">
+                <div className="flex items-center gap-2 font-bold text-amber-400 text-xs">
+                  <Download className="w-4 h-4 text-amber-400 flex-shrink-0" />
+                  <span>Where to find "Download ZIP" in AI Studio:</span>
                 </div>
-                <ul className="list-disc list-inside space-y-2 text-[11px] text-slate-300">
-                  <li>
-                    <strong className="text-amber-300 font-bold">Why you saw "Get started / Count is 0":</strong> Your <code className="text-rose-300 font-mono">~/react-example</code> folder in Termux contains a default Vite starter template. You need to replace <code className="text-rose-300 font-mono">~/react-example</code> with the <strong>Crypto Miner Pro</strong> source code!
-                  </li>
-                  <li>
-                    <strong className="text-cyan-300 font-bold">Step A — Download Project ZIP:</strong> Click <strong>"Download ZIP"</strong> in AI Studio (from top-right export menu) to save <code className="text-cyan-300 font-mono">CryptoMiner.zip</code> to your phone Downloads.
-                  </li>
-                  <li>
-                    <strong className="text-emerald-400 font-bold">Step B — Run this command in Termux to extract & compile Crypto Miner Pro:</strong>
-                    <div className="mt-1.5 p-2.5 bg-slate-950 rounded-lg border border-slate-800 text-amber-300 font-mono text-[10px] sm:text-[11px] font-bold select-all break-all">
-                      pkg install unzip -y && termux-setup-storage && rm -rf ~/react-example && unzip -o /sdcard/Download/CryptoMiner.zip -d ~/react-example && cd ~/react-example && npm install && npm run build && npx cap sync android && cd android && ./gradlew assembleDebug -Pandroid.aapt2.overridePath=/data/data/com.termux/files/usr/bin/aapt2 --no-daemon && cp app/build/outputs/apk/debug/app-debug.apk /sdcard/Download/CryptoMiner.apk && termux-open /sdcard/Download/CryptoMiner.apk
-                    </div>
-                  </li>
-                  <li>
-                    <strong className="text-emerald-400 font-bold">Result:</strong> Termux will extract all Crypto Miner Pro source files, build the web app into native Android web assets, compile the APK, and open the installer with your actual Crypto Miner Pro app!
-                  </li>
-                </ul>
+                <div className="space-y-2 text-[11px] text-slate-300">
+                  <p>
+                    In the AI Studio interface (top-right corner of your browser screen):
+                  </p>
+                  <ol className="list-decimal list-inside space-y-1.5 text-slate-200">
+                    <li className="p-2 bg-slate-950/80 rounded-lg border border-slate-800">
+                      <strong>Option A (Top-Right Header Menu):</strong> Click the <strong>three dots (⋮)</strong> or <strong>Settings / Export (⚙️)</strong> icon in the top-right header bar next to "Share" or "Deploy", then select <strong>"Download ZIP"</strong> or <strong>"Export Code"</strong>.
+                    </li>
+                    <li className="p-2 bg-slate-950/80 rounded-lg border border-slate-800">
+                      <strong>Option B (Left Sidebar / Code Editor):</strong> Click the file explorer / code icon on the left panel, and click the <strong>Export / Download Project</strong> icon.
+                    </li>
+                  </ol>
+                  <div className="mt-2 p-2.5 bg-emerald-950/60 border border-emerald-800/80 rounded-lg text-emerald-300 font-medium text-[11px]">
+                    💡 <strong>Easier Alternative (No ZIP needed):</strong> Click <strong>"Method 1: Instant Web-APK"</strong> tab above! You can install Crypto Miner Pro directly onto your Android phone in 2 taps via Chrome without running any commands or downloading ZIPs.
+                  </div>
+                </div>
+              </div>
+
+              {/* Termux Auto-Extract & Build Guide */}
+              <div className="p-4 bg-slate-950 border border-slate-800 rounded-xl space-y-3">
+                <div className="flex items-center gap-2 font-bold text-cyan-400 text-xs">
+                  <Terminal className="w-4 h-4 text-cyan-400 flex-shrink-0" />
+                  <span>Termux Command (Runs after saving ZIP to phone Downloads):</span>
+                </div>
+                <p className="text-[11px] text-slate-300">
+                  Once you download the ZIP file to your phone's <strong>Downloads</strong> folder, copy & paste this command into Termux:
+                </p>
+                <div className="p-2.5 bg-slate-900 rounded-lg border border-slate-800 text-amber-300 font-mono text-[10px] sm:text-[11px] font-bold select-all break-all">
+                  cd ~ && pkg install unzip gradle -y && termux-setup-storage && ZIP_FILE=$(ls -t /sdcard/Download/*.zip 2&gt;/dev/null | head -n 1) && if [ -n "$ZIP_FILE" ]; then echo "Found zip: $ZIP_FILE"; rm -rf ~/react-example && unzip -o "$ZIP_FILE" -d ~/react-example; fi && cd ~/react-example && npm install && npm run build && npx cap sync android && cd android && chmod +x gradlew && ( ./gradlew assembleDebug -Pandroid.aapt2.overridePath=/data/data/com.termux/files/usr/bin/aapt2 --no-daemon || gradle assembleDebug -Pandroid.aapt2.overridePath=/data/data/com.termux/files/usr/bin/aapt2 --no-daemon ) && cp app/build/outputs/apk/debug/app-debug.apk /sdcard/Download/CryptoMiner.apk && termux-open /sdcard/Download/CryptoMiner.apk
+                </div>
               </div>
 
               <div className="bg-slate-950 border border-slate-800 rounded-xl p-4 font-mono text-[11px] text-purple-300 leading-relaxed overflow-x-auto">
